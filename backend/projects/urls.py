@@ -15,4 +15,5 @@ urlpatterns = [
     path('project-members/register/', views.Add_Member, name='Add_Member'),
     path('project-members-delete/<str:pk>/', views.Member_Delete, name='member-delete'),
     path('external-projects/', views.List_External_Projects, name='project-external'),
+    path('ProjectInformations/<str:pk>/', views.ProjectInformations, name='project-external'),
 ]

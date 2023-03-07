@@ -59,6 +59,14 @@ def ProjectUpdate(request, pk):
         serializer.save(project_owner=request.user)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def ProjectInformations(request, pk):
+    print(pk)
+    project = Project.objects.filter(id=pk)
+    serializer = ProjectSerializer(project, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])

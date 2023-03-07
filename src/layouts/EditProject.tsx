@@ -12,6 +12,7 @@ export const EditProject = () => {
   const navigate = useNavigate();
   const auth = useAuthContext(); 
   let {id , title : paramTitle, description : paramDescription, status : paramStatus, role: paramRole, uploaded:paramUploaded} = useParams()
+  console.log(paramUploaded)
   const [title, setTitle] = React.useState(paramTitle)
   const [description, setDescription] = React.useState(paramDescription)
   const [status, setStatus] = React.useState(paramStatus)
@@ -77,6 +78,7 @@ export const EditProject = () => {
       console.log('No data' )
     }
   }) ;
+  
 
  
   }
@@ -99,7 +101,7 @@ export const EditProject = () => {
         setStatus(response.data.status)
         setRole(response.data.role)
         console.log("zzzssz",response.data)
-         navigate(`/activeProjects/edit/${id}/${response.data.title}/${response.data.description}/${response.data.status}/admin`, { replace: true })
+        //  navigate(`activeProjects/edit/`, {id , title : paramTitle, description : paramDescription, status : paramStatus, role: paramRole, uploaded:paramUploaded})
         
 
 
@@ -111,6 +113,43 @@ export const EditProject = () => {
         console.log('No data' )
       }
     }) ;
+  }
+  const projectInformations = () => {
+    
+    const response = axios.get("http://127.0.0.1:8000/projects/ProjectInformations/"+id+"/", 
+      {
+        headers: { 'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${auth?.user?.access}`,
+      },
+      
+
+
+      
+
+      }
+    ).then((response) => {
+      console.log(response.data)
+      setTitle(response.data.title)
+      setDescription(response.data.description)
+      setStatus(response.data.status)
+      setRole(response.data.role)
+      // TODO: remove console.logs before deployment
+   
+      //navigate("/", { replace: true })
+
+  
+
+  }).catch((err)=>{
+    if (!err) {
+      console.log('No Server Response');
+    }  else {
+      console.log(err)
+      console.log('No data' )
+    }
+  }) ;
+  
+
+ 
   }
 
 
@@ -129,7 +168,7 @@ export const EditProject = () => {
        }
      ).then((response) => {
           // TODO: remove console.logs before deployment
-        console.log("zzzzzz:",JSON.parse(response?.data));
+        // console.log("zzzzzz:",JSON.parse(response?.data));
 
         setMembers(JSON.parse(response?.data))
         
@@ -148,11 +187,7 @@ export const EditProject = () => {
  })//,[,update]
 
   React.useEffect(() => {
-   // fetchEmployees()
-    // console.log("useEffect");
-    // const employees = axios.get(endpointsURL.customerCompanyNames).then(response => { setAdmins(response.data) });
-    // const customersNames = axios.get(endpointsURL.supplierCompanyNames).then(response => response.data );
-    // Promise.all([supliersNames, customersNames]).then((values) =>  setCompanyNames([...values[0].concat(values[1])]))
+    projectInformations()
   }, [ open])
 
   return (
@@ -228,6 +263,17 @@ export const EditProject = () => {
         :""
         
         }
+
+
+
+<Button
+      disabled={role==="viewer"} 
+      onClick={()=> navigate(`http://127.0.0.1:8000/${paramUploaded}`)}
+        fullWidth
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+      >Download File</Button>
+
 
 
 
